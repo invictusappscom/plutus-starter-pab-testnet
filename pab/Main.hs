@@ -18,7 +18,7 @@ import           Data.Aeson                          (FromJSON (..), ToJSON (..)
                                                      , defaultOptions, Options(..))
 import           Data.Default                        (def)
 import qualified Data.OpenApi                        as OpenApi
-import           Data.Text.Prettyprint.Doc           (Pretty (..), viaShow)
+import           Prettyprinter                       (Pretty (..), viaShow)
 import           GHC.Generics                        (Generic)
 import           Plutus.Contract                     (ContractError)
 import           Plutus.PAB.Effects.Contract.Builtin (Builtin, SomeBuiltin (..), BuiltinHandler(contractHandler))
@@ -29,27 +29,35 @@ import qualified Plutus.PAB.Webserver.Server         as PAB.Server
 import           Plutus.Contracts.Game               as Game
 import           Plutus.Trace.Emulator.Extract       (writeScriptsTo, ScriptsConfig (..), Command (..))
 import           Ledger.Index                        (ValidatorMode(..))
+import           Plutus.PAB.Run (runWith)
+import           Plutus.PAB.Run.PSGenerator (HasPSTypes (..))
+import qualified Language.PureScript.Bridge.SumType as Bridge ( argonaut, equal, genericShow, mkSumType) 
 
 main :: IO ()
-main = void $ Simulator.runSimulationWith handlers $ do
-    Simulator.logString @(Builtin StarterContracts) "Starting plutus-starter PAB webserver on port 8080. Press enter to exit."
-    shutdown <- PAB.Server.startServerDebug
-    -- Example of spinning up a game instance on startup
-    -- void $ Simulator.activateContract (Wallet 1) GameContract
-    -- You can add simulator actions here:
-    -- Simulator.observableState
-    -- etc.
-    -- That way, the simulation gets to a predefined state and you don't have to
-    -- use the HTTP API for setup.
+main = {-- void $ Simulator.runSimulationWith handlers $ --} do
+    runWith (Builtin.handleBuiltin @StarterContracts)
+    -- Simulator.logString @(Builtin StarterContracts) "Starting plutus-starter PAB webserver on port 8080. Press enter to exit."
+    -- shutdown <- PAB.Server.startServerDebug
+    -- -- Example of spinning up a game instance on startup
+    -- -- void $ Simulator.activateContract (Wallet 1) GameContract
+    -- -- You can add simulator actions here:
+    -- -- Simulator.observableState
+    -- -- etc.
+    -- -- That way, the simulation gets to a predefined state and you don't have to
+    -- -- use the HTTP API for setup.
 
-    -- Pressing enter results in the balances being printed
-    void $ liftIO getLine
+    -- -- Pressing enter results in the balances being printed
+    -- void $ liftIO getLine
 
-    Simulator.logString @(Builtin StarterContracts) "Balances at the end of the simulation"
-    b <- Simulator.currentBalances
-    Simulator.logBalances @(Builtin StarterContracts) b
+    -- Simulator.logString @(Builtin StarterContracts) "Balances at the end of the simulation"
+    -- b <- Simulator.currentBalances
+    -- Simulator.logBalances @(Builtin StarterContracts) b
 
-    shutdown
+    -- shutdown
+
+instance HasPSTypes StarterContracts where
+    psTypes =
+        [ Bridge.equal . Bridge.genericShow . Bridge.argonaut $ Bridge.mkSumType @StarterContracts ]
 
 -- | An example of computing the script size for a particular trace.
 -- Read more: <https://plutus.readthedocs.io/en/latest/plutus/howtos/analysing-scripts.html>
@@ -93,9 +101,7 @@ instance Builtin.HasDefinitions StarterContracts where
     getContract = \case
         GameContract -> SomeBuiltin (Game.game @ContractError)
 
-handlers :: SimulatorEffectHandlers (Builtin StarterContracts)
-handlers =
-    Simulator.mkSimulatorHandlers def def
-    $ interpret (contractHandler Builtin.handleBuiltin)
-
-
+-- handlers :: SimulatorEffectHandlers (Builtin StarterContracts)
+-- handlers =
+--     Simulator.mkSimulatorHandlers def def
+--     $ interpret (contractHandler Builtin.handleBuiltin)

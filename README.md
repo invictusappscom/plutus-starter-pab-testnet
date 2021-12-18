@@ -1,3 +1,21 @@
+# Notes for PAB testnet
+Please follow instructions from [PAB setup](https://gist.github.com/mikekeke/883d56c38e0237444ac98ae5257e174f) to set properly PAB on testnet
+1. Build the PAB executable:
+
+```
+cabal build plutus-starter-pab
+```
+
+2. Run the PAB binary:
+
+```
+cabal exec -- plutus-starter-pab --config plutus-pab.yaml migrate
+cabal exec -- plutus-starter-pab --config plutus-pab.yaml --passphrase WALLET_PASSPHRASE webserver
+```
+Known issues:
+- nix-shell is not working from this project, needs to be properly configured so you should start nix-shell from [plutus-apps repo](https://github.com/input-output-hk/plutus-apps/tree/main/plutus-pab) 
+- Game example `guess` endpoint not works just `lock` works need to be adjusted code for testnet
+
 # Plutus Platform starter project
 
 This project gives a simple starter project for using the Plutus Platform.
