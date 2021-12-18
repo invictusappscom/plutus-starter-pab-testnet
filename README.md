@@ -28,7 +28,6 @@ $ curl -H "Content-Type: application/json"   --request POST   --data '{"amount":
 Note instead of `13bf1baa1460e964a88c0f22e9f1b338f6cdcbf4` you need to put your wallet id which you can see with command `cardano-wallet wallet list`
 
 Known issues:
-- nix-shell is not working from this project, needs to be properly configured so you should start nix-shell from [plutus-apps repo](https://github.com/input-output-hk/plutus-apps/tree/main/plutus-pab) 
 - Game example `guess` endpoint not works just `lock` works need to be adjusted code for testnet
 
 # Plutus Platform starter project
