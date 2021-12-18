@@ -12,6 +12,21 @@ cabal build plutus-starter-pab
 cabal exec -- plutus-starter-pab --config plutus-pab.yaml migrate
 cabal exec -- plutus-starter-pab --config plutus-pab.yaml --passphrase WALLET_PASSPHRASE webserver
 ```
+WALLET_PASSPHRASE set spending password you used for creating wallet.
+
+On the second terminal:
+```
+$ curl -s -H "Content-Type: application/json"   --request POST   --data '{"caID": "GameContract", "caWallet":{"getWalletId": "13bf1baa1460e964a88c0f22e9f1b338f6cdcbf4"}}'   http://localhost:9080/api/contract/activate | jq
+{
+  "unContractInstanceId": "f323b84e-0d3f-484b-b133-bf7bb910c470"
+}
+
+$ INSTANCE_ID=f323b84e-0d3f-484b-b133-bf7bb910c470
+
+$ curl -H "Content-Type: application/json"   --request POST   --data '{"amount":{"getValue":[[{"unCurrencySymbol":""},[[{"unTokenName":""},10000000]]]]},"secretWord":"eagle"}'   http://localhost:9080/api/contract/instance/$INSTANCE_ID/endpoint/lock
+```
+Note instead of `13bf1baa1460e964a88c0f22e9f1b338f6cdcbf4` you need to put your wallet id which you can see with command `cardano-wallet wallet list`
+
 Known issues:
 - nix-shell is not working from this project, needs to be properly configured so you should start nix-shell from [plutus-apps repo](https://github.com/input-output-hk/plutus-apps/tree/main/plutus-pab) 
 - Game example `guess` endpoint not works just `lock` works need to be adjusted code for testnet
@@ -178,7 +193,7 @@ the instance from Wallet 1:
 export INSTANCE_ID=...
 curl -H "Content-Type: application/json" \
   --request POST \
-  --data '{"amount":{"getValue":[[{"unCurrencySymbol":""},[[{"unTokenName":""},90]]]]},"secretWord":"eagle"}' \
+  --data '{"amount":{"getValue":[[{"unCurrencySymbol":""},[[{"unTokenName":""},1000000]]]]},"secretWord":"eagle"}' \
   http://localhost:9080/api/contract/instance/$INSTANCE_ID/endpoint/lock
 ```
 
