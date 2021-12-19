@@ -1,5 +1,6 @@
 # PAB testnet notes
-Please follow instructions from [PAB setup](https://gist.github.com/mikekeke/883d56c38e0237444ac98ae5257e174f) to set properly PAB on testnet
+Please follow instructions from [PAB setup](https://gist.github.com/mikekeke/883d56c38e0237444ac98ae5257e174f) to set properly PAB on testnet.
+It is tested only with nix-shell setup maybe it will not work with devcontainer. If it is not working please submit [an issue](https://github.com/invictusappscom/plutus-starter-pab-testnet/issues)
 1. Build the PAB executable:
 
 ```
