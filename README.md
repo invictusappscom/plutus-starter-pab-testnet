@@ -1,4 +1,4 @@
-# Notes for PAB testnet
+# PAB testnet notes
 Please follow instructions from [PAB setup](https://gist.github.com/mikekeke/883d56c38e0237444ac98ae5257e174f) to set properly PAB on testnet
 1. Build the PAB executable:
 
@@ -12,9 +12,9 @@ cabal build plutus-starter-pab
 cabal exec -- plutus-starter-pab --config plutus-pab.yaml migrate
 cabal exec -- plutus-starter-pab --config plutus-pab.yaml --passphrase WALLET_PASSPHRASE webserver
 ```
-WALLET_PASSPHRASE set spending password you used for creating wallet.
+WALLET_PASSPHRASE set spending password you used for creating the wallet.
 
-On the second terminal:
+In the second terminal:
 ```
 $ curl -s -H "Content-Type: application/json"   --request POST   --data '{"caID": "GameContract", "caWallet":{"getWalletId": "13bf1baa1460e964a88c0f22e9f1b338f6cdcbf4"}}'   http://localhost:9080/api/contract/activate | jq
 {
@@ -28,7 +28,9 @@ $ curl -H "Content-Type: application/json"   --request POST   --data '{"amount":
 Note instead of `13bf1baa1460e964a88c0f22e9f1b338f6cdcbf4` you need to put your wallet id which you can see with command `cardano-wallet wallet list`
 
 Known issues:
-- Game example `guess` endpoint not works just `lock` works need to be adjusted code for testnet
+- Game example `guess` endpoint doesn't work, just `lock` works. This needs to be adjusted in code in order to work on testnet.
+
+Below this it is the standard readme from plutus-starter templete.
 
 # Plutus Platform starter project
 
